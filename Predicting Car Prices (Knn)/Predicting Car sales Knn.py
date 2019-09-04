@@ -3,12 +3,10 @@
 
 # # Introduction into dataset
 
-# In the project I'll be working with a dataset that contains various technical information on cars, including: the motor's displacement, the weight of the car, the miles per gallon, how fast the car accelerates, and more.
-# 
-# I will be using this data to predict the cars market value based on some key attributes.
-
-# In[1]:
-
+# In the project I'll be working with a dataset that contains various technical information on cars, including: 
+# the motor's displacement, the weight of the car, the miles per gallon, how fast the car accelerates, and more.
+# In total there are 205 cars and 26 features.
+# I will be using this data to predict the cars market value based on some key features.
 
 import pandas as pd
 import numpy as np
@@ -22,61 +20,38 @@ cars = pd.read_csv('imports-85.data', names=cols)
 print(cars.head())
 
 
-# In[2]:
-
-
 # Select only the columns with continuous values from - https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.names
+
 continuous_values_cols = ['normalized-losses', 'wheel-base', 'length', 'width', 'height', 'curb-weight', 'bore', 'stroke', 'compression-rate', 'horsepower', 'peak-rpm', 'city-mpg', 'highway-mpg', 'price']
 numeric_cars = cars[continuous_values_cols]
-
-
-# In[3]:
-
-
 numeric_cars.head(5)
 
 
-# # Data Cleaning
-
-# In[4]:
-
+# Data Cleaning
 
 numeric_cars = numeric_cars.replace('?', np.nan)
-
-
-# In[5]:
-
-
 numeric_cars = numeric_cars.astype('float')
 numeric_cars.isnull().sum()
 
 
-# In[6]:
-
-
 # Because `price` is the column we want to predict, let's remove any rows with missing `price` values.
+
 numeric_cars = numeric_cars.dropna(subset=['price'])
 numeric_cars.isnull().sum()
 
 
-# In[7]:
-
-
 # Replace missing values in other columns using column means.
+
 numeric_cars = numeric_cars.fillna(numeric_cars.mean())
 
 
-# In[8]:
-
-
 # Confirm that there's no more missing values.
+
 numeric_cars.isnull().sum()
 
 
-# In[9]:
-
-
 # Normalize all columnns to range from 0 to 1 except the target column.
+
 price_col = numeric_cars['price']
 numeric_cars = (numeric_cars - numeric_cars.min())/(numeric_cars.max() - numeric_cars.min())
 numeric_cars['price'] = price_col
@@ -134,8 +109,6 @@ rmse_results_series = pd.Series(rmse_results)
 rmse_results_series.sort_values()
 
 
-# In[20]:
-
 
 def knn_train_test(train_col, target_col, df):
     np.random.seed(1)
@@ -184,8 +157,6 @@ k_rmse_results
 
 # # Mulitvariate Model
 
-# In[23]:
-
 
 # First I want to find the best feature from the last step by 
 # Compute average RMSE across different`k` values for each feature.
@@ -195,9 +166,6 @@ for k,v in k_rmse_results.items():
     feature_avg_rmse[k] = avg_rmse
 series_avg_rmse = pd.Series(feature_avg_rmse)
 series_avg_rmse.sort_values()
-
-
-# In[24]:
 
 
 def knn_train_test(train_cols, target_col, df):
@@ -236,8 +204,6 @@ def knn_train_test(train_cols, target_col, df):
 k_rmse_results = {}
 
 
-# In[25]:
-
 
 two_best_features = ['horsepower', 'width']
 rmse_val = knn_train_test(two_best_features, 'price', numeric_cars)
@@ -261,8 +227,6 @@ k_rmse_results["six best features"] = rmse_val
 
 k_rmse_results
 
-
-# In[26]:
 
 
 # Now let's optimize the model that performed the best in the last step.
@@ -336,220 +300,5 @@ for k,v in k_rmse_results.items():
     plt.ylabel('RMSE')
 
 
-# It seems that all models have an optimal k-value somewhere below 5, this could be because the classes are so close that any large enough k number begins to include values from other classes.
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[59]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
+# It seems that all models have an optimal k-value somewhere below 5, this could be because the classes are so close that 
+# any large enough k number begins to include values from other classes.
